@@ -38,14 +38,14 @@ curl -XPOST http://localhost:8080/mymoney/service/account -d "{'balance':300.50,
 * (GET) /mymoney/service/account/:id - retrieves an account by id
 
 ```bash
-curl http://localhost:8080/mymoney/service/account/42"
+curl http://localhost:8080/mymoney/service/account/42
 ```
 
 
 
 #### Transfer money
 
-* (POST) /mymoney/service/transfer - Creates a transfer. The amount has the currency of the sender.
+* (POST) /mymoney/service/transfer - Creates a transfer. The amount has the currency of the senders account and will be converted if needed.
 
 ```bash
 curl -XPOST localhost:8080/mymoney/service/transfer -d "{'sender':4, 'receiver':1, 'amount':34.55}"
