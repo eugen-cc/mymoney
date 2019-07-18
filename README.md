@@ -30,11 +30,16 @@ Server will start at **http://localhost:8080/**
 
 #### Account
 
-* (POST) /mymoney/service/account - Creates an Account. AccountRequest as json string in body.
+* (POST) /mymoney/service/account - Creates an Account. AccountRequest as json string in body. Possible currencies see **[Currencies](https://github.com/eugen-cc/mymoney/blob/master/src/main/java/cc/eugen/mymoney/model/entity/Currency.java)** 
+
 ```bash
 curl -XPOST http://localhost:8080/mymoney/service/account -d "{'balance':300.50, 'currency':'EUR'}"
 ```
 * (GET) /mymoney/service/account/:id - retrieves an account by id
+
+```bash
+curl http://localhost:8080/mymoney/service/account/42"
+```
 
 
 
