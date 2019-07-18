@@ -1,6 +1,8 @@
 package cc.eugen.mymoney.model.dto;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,10 +14,14 @@ import java.io.Serializable;
  **/
 @Getter
 @Setter
+@Builder
 @ToString
-public class Transfer implements Serializable {
+public class TransferDTO implements Serializable {
 
+    @NonNull
     private long sender;
+    @NonNull
     private long receiver;
+    @NonNull
     private double amount;
 }

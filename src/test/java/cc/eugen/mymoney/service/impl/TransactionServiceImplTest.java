@@ -55,7 +55,7 @@ public class TransactionServiceImplTest {
 
     @Before
     public void setup() {
-        when(dao.findById(anyLong())).thenReturn(newTransaction());
+        when(dao.findById(anyLong())).thenReturn(Optional.of(newTransaction()));
         when(accountService.retrieveAccount(anyLong())).thenAnswer(in -> newAccount(in.getArgument(0)));
     }
 

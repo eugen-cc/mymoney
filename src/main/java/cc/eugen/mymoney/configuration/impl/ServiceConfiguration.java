@@ -33,7 +33,10 @@ public class ServiceConfiguration extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new ServletConfiguration());
+
+        install(new JpaPersistModule("mymoney")); //from persistence.xml
+        bind(PersistenceInitializer.class);
+
         bind(AccountDAO.class).to(AccountDAOImpl.class);
         bind(AccountService.class).to(AccountServiceImpl.class).in(Singleton.class);
         bind(TransactionDAO.class).to(TransactionDAOImpl.class).in(Singleton.class);
@@ -44,7 +47,9 @@ public class ServiceConfiguration extends AbstractModule {
 
         Multibinder<Initializer> actionBinder = Multibinder.newSetBinder(binder(), Initializer.class);
         actionBinder.addBinding().to(Delegate.class);
-        actionBinder.addBinding().to(TestDataInitializer.class);
+
+        // test data for demonstration purpose
+        // actionBinder.addBinding().to(TestDataInitializer.class);
 
         bind(Javalin.class).toInstance(javalin);
     }

@@ -26,7 +26,6 @@ public class TestDataInitializer implements Initializer {
     @Inject
     private AccountService accountService;
 
-    @Transactional
     public void init() {
         log.debug("create test data");
         accountService.createAccount(valueOf(1_285.66), GBP, valueOf(-1_200.00));

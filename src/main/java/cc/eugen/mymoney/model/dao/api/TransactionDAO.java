@@ -11,7 +11,7 @@ import java.util.Optional;
  **/
 public interface TransactionDAO {
 
-    Transaction findById(Long transactionId);
+    Optional<Transaction> findById(Long transactionId);
 
     Transaction save(Transaction transaction);
 

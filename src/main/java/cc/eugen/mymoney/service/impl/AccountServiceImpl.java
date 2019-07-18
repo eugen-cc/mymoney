@@ -4,6 +4,7 @@ import cc.eugen.mymoney.model.dao.api.AccountDAO;
 import cc.eugen.mymoney.model.entity.Account;
 import cc.eugen.mymoney.model.entity.Currency;
 import cc.eugen.mymoney.service.api.AccountService;
+import cc.eugen.mymoney.service.exception.NotFoundException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
@@ -28,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account retrieveAccount(Long accountId) {
         log.debug("retrieveAccount {} ", accountId);
-        return accountDAO.findById(accountId).orElseThrow();
+        return accountDAO.findById(accountId).orElseThrow(()-> new NotFoundException("There is not account with id:"+accountId));
     }
 
     @Override

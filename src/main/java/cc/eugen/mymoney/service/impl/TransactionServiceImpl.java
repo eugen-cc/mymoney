@@ -6,8 +6,10 @@ import cc.eugen.mymoney.model.entity.Transaction;
 import cc.eugen.mymoney.service.api.AccountService;
 import cc.eugen.mymoney.service.api.TransactionHandler;
 import cc.eugen.mymoney.service.api.TransactionService;
+import cc.eugen.mymoney.service.exception.NotFoundException;
 import cc.eugen.mymoney.service.exception.TransferFailedException;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +22,7 @@ import java.util.List;
  * @since 07/14/2019
  **/
 @Slf4j
+@Singleton
 public class TransactionServiceImpl implements TransactionService {
 
     @Inject
@@ -35,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction retrieveTransaction(Long transactionId) {
         log.debug("retrieve transaction " + transactionId);
-        return transactionDAO.findById(transactionId);
+        return transactionDAO.findById(transactionId).orElseThrow(() -> new NotFoundException("There is not transaction with id:" + transactionId));
     }
 
     @Override
@@ -44,7 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
         log.debug("Sender: {} , Receiver: {} , Amount: {}", senderId, receiverId, amount.doubleValue());
         var sender = accountService.retrieveAccount(senderId);
         var receiver = accountService.retrieveAccount(receiverId);
-        validate(sender, amount);
+        validate(sender,receiver, amount);
         var transaction = newTransaction(sender, receiver, amount);
         return handler.handleTransaction(transaction);
     }
@@ -58,11 +61,14 @@ public class TransactionServiceImpl implements TransactionService {
         return t;
     }
 
-    private void validate(Account sender, BigDecimal amount) {
+    private void validate(Account sender, Account receiver, BigDecimal amount) {
+        if(sender.getId().equals(receiver.getId())){
+            throw new TransferFailedException("Sender must not be the receiver!");
+        }
         if (amount.compareTo(BigDecimal.ZERO) < 1) {
             throw new TransferFailedException("Illegal amount " + amount.doubleValue());
         }
-        if(sender.getBalance().subtract(amount).compareTo(sender.getOverdraft())<0) {
+        if (sender.getBalance().subtract(amount).compareTo(sender.getOverdraft()) < 0) {
             throw new TransferFailedException("Not enough credit!");
         }
     }
