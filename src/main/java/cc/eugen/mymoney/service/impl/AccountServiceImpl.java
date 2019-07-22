@@ -43,6 +43,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
+    public Account updateAccount(Account account) {
+        return accountDAO.save(account);
+    }
+
+    @Override
     public Account createAccount(BigDecimal init, Currency currency) {
         return createAccount(init, currency, BigDecimal.ZERO);
     }

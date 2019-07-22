@@ -29,4 +29,10 @@ public interface TransactionService {
      * @return a list of all transactions or an empty list
      */
     List<Transaction> retrieveAll();
+
+    /**
+     * @param transaction Transaction object needs to be updated
+     * @return updated object
+     */
+    Transaction update(Transaction transaction);
 }

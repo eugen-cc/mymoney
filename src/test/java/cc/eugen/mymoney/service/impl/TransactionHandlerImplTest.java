@@ -1,16 +1,12 @@
 package cc.eugen.mymoney.service.impl;
 
-import cc.eugen.mymoney.model.dao.api.AccountDAO;
-import cc.eugen.mymoney.model.dao.api.ExchangeDAO;
-import cc.eugen.mymoney.model.dao.api.TransactionDAO;
 import cc.eugen.mymoney.model.entity.Account;
 import cc.eugen.mymoney.model.entity.Currency;
 import cc.eugen.mymoney.model.entity.Exchange;
 import cc.eugen.mymoney.model.entity.Transaction;
 import cc.eugen.mymoney.service.api.AccountService;
 import cc.eugen.mymoney.service.api.ExchangeService;
-import cc.eugen.mymoney.service.api.TransactionHandler;
-import com.google.inject.Inject;
+import cc.eugen.mymoney.service.api.TransactionService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,9 +22,9 @@ import java.math.BigDecimal;
 import java.util.Random;
 
 import static java.math.BigDecimal.valueOf;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -45,24 +41,17 @@ public class TransactionHandlerImplTest extends Assert {
     private TransactionHandlerImpl underTest;
 
     @Mock
-    private ExchangeService exchangeService;
+    private ExchangeService exchangeServiceMock;
 
     @Mock
-    private ExchangeDAO exchangeDAO;
+    private TransactionService transactionServiceMock;
 
     @Mock
-    private TransactionDAO transactionDAO;
-
-    @Mock
-    private AccountDAO accountDAO;
+    private AccountService accountServiceMock;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void setup(){
-
-    }
 
     private Exchange newExchange(double value) {
         var ex = new Exchange();
@@ -70,29 +59,36 @@ public class TransactionHandlerImplTest extends Assert {
         return ex;
     }
 
+    @Before
+    public void init(){
+        when(accountServiceMock.retrieveAccount(anyLong())).thenAnswer(in -> newAccount(in.getArgument(0)));
+    }
+
     @Test
     public void testTransactonHandling() {
         var t = new Transaction();
 
-        when(exchangeService.exchange(any(), any(), any(), anyBoolean())).thenReturn(newExchange(1234));
-        when(transactionDAO.save(any(Transaction.class))).thenReturn(t);
+        when(exchangeServiceMock.exchange(any(), any(), any(), anyBoolean())).thenReturn(newExchange(1234));
+        when(transactionServiceMock.update(any(Transaction.class))).thenReturn(t);
 
-        t.setSender(newAccount());
-        t.setReceiver(newAccount());
+        t.setSender(newAccount(1L));
+        t.setReceiver(newAccount(2L));
         t.setAmount(BigDecimal.TEN);
 
         var result = underTest.handleTransaction(t);
 
         assertTrue(result.getCompleted());
-        verify(exchangeService).exchange(t.getAmount(), t.getSender().getCurrency(), t.getReceiver().getCurrency(), false);
-        verify(accountDAO, times(2)).save(any(Account.class));
-        verify(exchangeDAO).save(any(Exchange.class));
-        verify(transactionDAO).save(any(Transaction.class));
+        verify(exchangeServiceMock).exchange(t.getAmount(), t.getSender().getCurrency(), t.getReceiver().getCurrency(), false);
+        verify(accountServiceMock, times(2)).retrieveAccount(anyLong());
+        verify(accountServiceMock, times(2)).updateAccount(any(Account.class));
+        verify(exchangeServiceMock).updateExchange(any(Exchange.class));
+        verify(transactionServiceMock).update(any(Transaction.class));
     }
 
-    private Account newAccount() {
+    private Account newAccount(Long id) {
         Random r = new Random();
         var a = new Account();
+        a.setId(id);
         a.setBalance(valueOf(r.nextDouble()*1000));
         Currency[] currencies = Currency.values();
         a.setCurrency(currencies[r.nextInt(currencies.length)]);
@@ -102,7 +98,7 @@ public class TransactionHandlerImplTest extends Assert {
 
     @After
     public void tearDown() {
-        verifyNoMoreInteractions(exchangeService, exchangeDAO, accountDAO, transactionDAO);
+        verifyNoMoreInteractions(exchangeServiceMock, accountServiceMock, transactionServiceMock);
     }
 
 }

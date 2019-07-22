@@ -78,4 +78,10 @@ public class TransactionServiceImpl implements TransactionService {
         log.debug("get all transactions");
         return transactionDAO.findAll().orElse(Collections.emptyList());
     }
+
+    @Override
+    @Transactional
+    public Transaction update(Transaction transaction) {
+        return transactionDAO.save(transaction);
+    }
 }

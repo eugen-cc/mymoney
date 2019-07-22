@@ -74,6 +74,11 @@ public class ExchangeServiceImpl implements ExchangeService {
         return exchangeDAO.findAll().orElse(Collections.emptyList());
     }
 
+    @Override
+    public Exchange updateExchange(Exchange exchange) {
+        return exchangeDAO.save(exchange);
+    }
+
     private BigDecimal getFee(Currency from, Currency to, boolean withFee, BigDecimal value) {
         return !withFee || from == to ? BigDecimal.ZERO : value.multiply(feePercent, MathContext.DECIMAL32);
     }

@@ -33,6 +33,13 @@ public interface AccountService {
      */
     Account createAccount(BigDecimal init, Currency currency, BigDecimal overdraft);
 
+
+    /**
+     * @param account account that needs to be updated
+     * @return updated account object
+     */
+    Account updateAccount(Account account);
+
     /**
      * @return a list of all accounts, or an empty list
      */

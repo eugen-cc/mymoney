@@ -25,4 +25,10 @@ public interface ExchangeService {
       * @return a list of all exchanges
       */
      List<Exchange> retrieveAll();
+
+     /**
+      * @param exchange Exchange object needs to be update
+      * @return update Exchange object
+      */
+     Exchange updateExchange(Exchange exchange);
 }
