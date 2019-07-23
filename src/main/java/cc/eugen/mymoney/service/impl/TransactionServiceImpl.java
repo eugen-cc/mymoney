@@ -36,13 +36,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
+    @Transactional
     public Transaction retrieveTransaction(Long transactionId) {
         log.debug("retrieve transaction " + transactionId);
         return transactionDAO.findById(transactionId).orElseThrow(() -> new NotFoundException("There is not transaction with id:" + transactionId));
     }
 
     @Override
-    @Transactional
     public Transaction transfer(Long senderId, Long receiverId, BigDecimal amount) {
         log.debug("Sender: {} , Receiver: {} , Amount: {}", senderId, receiverId, amount.doubleValue());
         var sender = accountService.retrieveAccount(senderId);

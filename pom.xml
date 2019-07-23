@@ -18,6 +18,7 @@
         <slf4jsimple.version>1.7.26</slf4jsimple.version>
         <junit.version>4.12</junit.version>
         <mockito.version>3.0.0</mockito.version>
+        <concurrent-junit.version>1.0.2</concurrent-junit.version>
     </properties>
 
     <dependencies>
@@ -90,6 +91,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vmlens</groupId>
+            <artifactId>concurrent-junit</artifactId>
+            <version>${concurrent-junit.version}</version>
             <scope>test</scope>
         </dependency>
 

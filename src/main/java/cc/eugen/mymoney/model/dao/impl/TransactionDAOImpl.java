@@ -3,6 +3,7 @@ package cc.eugen.mymoney.model.dao.impl;
 import cc.eugen.mymoney.model.dao.api.TransactionDAO;
 import cc.eugen.mymoney.model.entity.Transaction;
 import com.google.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import static java.util.Optional.ofNullable;
  * @author Eugen Gross
  * @since 07/14/2019
  **/
+@Slf4j
 public class TransactionDAOImpl implements TransactionDAO {
 
     @Inject
@@ -25,7 +27,10 @@ public class TransactionDAOImpl implements TransactionDAO {
     }
 
     public Transaction save(Transaction transaction) {
-        return em.get().merge(transaction);
+        transaction = em.get().merge(transaction);
+        em.get().flush();
+        log.info("save transaction : {}", transaction);
+        return transaction;
     }
 
     @Override

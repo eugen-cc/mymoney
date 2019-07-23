@@ -35,7 +35,7 @@ public class ServiceConfiguration extends AbstractModule {
     protected void configure() {
 
         install(new JpaPersistModule("mymoney")); //from persistence.xml
-        bind(PersistenceInitializer.class);
+        bind(PersistenceInitializer.class).in(Singleton.class);
 
         bind(AccountDAO.class).to(AccountDAOImpl.class);
         bind(AccountService.class).to(AccountServiceImpl.class).in(Singleton.class);

@@ -2,6 +2,7 @@ package cc.eugen.mymoney.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 )
 @Getter
 @Setter
+@ToString
 @Entity
 public class Transaction extends AbstractEntity {
 

@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.inject.Guice.createInjector;
@@ -47,7 +48,7 @@ public abstract class ApplicationTestBase extends Assert {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException, InterruptedException {
         accountService = guice.getInstance(AccountService.class);
         transactionService = guice.getInstance(TransactionService.class);
         exchangeService = guice.getInstance(ExchangeService.class);

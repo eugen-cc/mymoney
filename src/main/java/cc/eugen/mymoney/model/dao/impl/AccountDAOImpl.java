@@ -5,6 +5,8 @@ import cc.eugen.mymoney.model.dao.api.AccountDAO;
 import cc.eugen.mymoney.model.entity.Account;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.persist.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
  * @author Eugen Gross
  * @since 07/14/2019
  **/
+@Slf4j
 public class AccountDAOImpl implements AccountDAO {
 
     @Inject
@@ -22,12 +25,18 @@ public class AccountDAOImpl implements AccountDAO {
     @Inject
     private Provider<EntityManager> em;
 
+    @Transactional
     public Optional<Account> findById(Long accountId) {
+        em.get().flush();
         return Optional.ofNullable(em.get().find(Account.class, accountId));
     }
 
+    @Transactional
     public Account save(Account account) {
-        return em.get().merge(account);
+        account = em.get().merge(account);
+        em.get().flush();
+        log.info("saved account : {}", account);
+        return account;
     }
 
     @Override

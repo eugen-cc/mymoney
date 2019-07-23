@@ -27,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
     private AccountDAO accountDAO;
 
     @Override
+    @Transactional
     public Account retrieveAccount(Long accountId) {
         log.debug("retrieveAccount {} ", accountId);
         return accountDAO.findById(accountId).orElseThrow(()-> new NotFoundException("There is not account with id:"+accountId));

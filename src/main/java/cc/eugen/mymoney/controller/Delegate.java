@@ -12,6 +12,7 @@ import cc.eugen.mymoney.service.exception.TransferFailedException;
 import cc.eugen.mymoney.service.impl.converter.Converter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.persist.Transactional;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;

@@ -20,7 +20,7 @@ public class ExchangeDAOImpl implements ExchangeDAO {
 
     @Override
     public Exchange save(Exchange e) {
-        em.get().merge(e);
+        e = em.get().merge(e);
         em.get().flush();
         return e;
     }

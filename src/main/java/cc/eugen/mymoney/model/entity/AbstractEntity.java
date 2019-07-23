@@ -22,7 +22,6 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@ToString
 @EqualsAndHashCode
 @MappedSuperclass
 @Cacheable(false)

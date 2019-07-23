@@ -9,6 +9,8 @@ import cc.eugen.mymoney.service.api.TransactionService;
 import cc.eugen.mymoney.service.exception.TransferFailedException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.persist.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 07/14/2019
  **/
 @Singleton
+@Slf4j
 public class TransactionHandlerImpl implements TransactionHandler {
 
     /**
@@ -39,6 +42,7 @@ public class TransactionHandlerImpl implements TransactionHandler {
     }
 
     @Override
+    @Transactional
     public Transaction handleTransaction(Transaction transaction) {
 
         var sender = transaction.getSender();
@@ -55,7 +59,9 @@ public class TransactionHandlerImpl implements TransactionHandler {
 
         // using lowerid first prevents deadlock
         synchronized (getLock(lowerAccountId)) {
+            log.info("acquired lock for {}", lowerAccountId);
             synchronized (getLock(higherAccountId)) {
+                log.info("acquired lock for {}", higherAccountId);
                 sender = accountService.retrieveAccount(sender.getId());
                 receiver = accountService.retrieveAccount(receiver.getId());
 
