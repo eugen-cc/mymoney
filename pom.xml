@@ -16,7 +16,7 @@
         <hibernate.version>5.4.3.Final</hibernate.version>
         <h2.version>1.4.199</h2.version>
         <slf4jsimple.version>1.7.26</slf4jsimple.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockito.version>3.0.0</mockito.version>
         <concurrent-junit.version>1.0.2</concurrent-junit.version>
     </properties>
